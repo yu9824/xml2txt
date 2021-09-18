@@ -1,6 +1,6 @@
 from .xml2txt import *
 
-__version__      = '0.0.2'
+__version__      = '0.0.3dev'
 __license__      = 'LGPL3'
 __author__       = 'yu9824'
 __copyright__    = 'Copyright © 2021 yu9824'

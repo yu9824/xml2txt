@@ -13,10 +13,10 @@ def xml2df(fpath, start = 10, end = 60, thres = 0.001):
     intensity = content[content.find('<stick_series'):content.find('</stick_series')]
     # print(re.findall('<intensity>(.*)</intensity>', intensity))
 
-    milli = Decimal('0.001')
+    milli = Decimal('1000')
     def convert(s):
         less_than = '&lt;'  # '<'
-        if less_than in s:  # 1milliより小さいことを意味するはずなので，無視．
+        if less_than in s:  # 小さいことを意味するはずなので，無視．
             return 0
         if s == 'm':
             return milli
