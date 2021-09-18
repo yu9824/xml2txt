@@ -111,8 +111,8 @@ if 'py2app' in sys.argv:
     )
 
     # aliasモードじゃないとき．
-    # if not alias:
-    #     {copyfile(f, os.path.join(frameworks_path, os.path.basename(f))) for f in dylib_files}
+    if not alias:
+        {copyfile(f, os.path.join(frameworks_path, os.path.basename(f))) for f in dylib_files}
 else:
     """
     参考: https://python-packaging-user-guide-ja.readthedocs.io/ja/latest/distributing.html#manifest-in
