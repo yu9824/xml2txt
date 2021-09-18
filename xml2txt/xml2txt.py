@@ -1,41 +1,53 @@
 import re
 # import matplotlib.pyplot as plt # デバッグ用
 import pandas as pd
+from decimal import Decimal
 
 
 def xml2df(file, start = 10, end = 60, thres = 0.001):
+    # float to Decimal
+    thres = Decimal(str(thres))
+
     with open(file, mode = 'r', encoding = 'utf_8') as f:
         content = f.read()#.replace('\n', '')
     intensity = content[content.find('<stick_series'):content.find('</stick_series')]
     # print(re.findall('<intensity>(.*)</intensity>', intensity))
 
-    milli = 1 * 10 ** -3
+    milli = Decimal('0.001')
     def convert(s):
+        less_than = '&lt;'  # '<'
+        if less_than in s:  # 1milliより小さいことを意味するはずなので，無視．
+            return 0
         if s == 'm':
             return milli
         elif 'm' in s:
-            return int(s.replace('m', '')) * milli
+            return Decimal(s.replace('m', '')) * milli
+        elif s.isdigit():
+            return Decimal(s)
         else:
-            return int(s)
-    intensities = map(convert, re.findall('<intensity>(.*)</intensity>', intensity))
-    thetas = map(float, re.findall('<theta>(.*)</theta>', intensity))
-    diff = dict(zip(thetas, intensities))
+            raise ValueError('Cannot convert {0} integer or float.'.format(s))
+
+    intensities = list(map(convert, re.findall('<intensity>(.*)</intensity>', intensity)))
+    thetas = list(map(Decimal, re.findall('<theta>(.*)</theta>', intensity)))
+    if len(intensities) != len(thetas):
+        raise ValueError('`intensities` and `thetas` do not have same length.')
 
     forgraph = [[start], [0]]
-    for k, theta in enumerate(diff):
+    for k, theta in enumerate(thetas):
         if theta < start:
             continue
         elif theta < end:
             forgraph[0].append(theta-thres)
             forgraph[1].append(0)
             forgraph[0].append(theta)
-            forgraph[1].append(diff[theta])
+            forgraph[1].append(intensities[k])
             forgraph[0].append(theta+thres)
             forgraph[1].append(0)
         else:
-            forgraph[0].append(end)
-            forgraph[1].append(0)
             break
+    forgraph[0].append(end)
+    forgraph[1].append(0)
+
     # fig = plt.figure()
     # ax = fig.add_subplot(111)
     # ax.plot(*forgraph)
