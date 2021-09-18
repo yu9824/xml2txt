@@ -11,6 +11,7 @@ from shutil import copyfile
 import os
 import sys
 import re
+import subprocess
 
 # 再帰回数に引っかかるのでとりあえず大きい数に．
 sys.setrecursionlimit(10 ** 9)
@@ -22,7 +23,7 @@ DESCRIPTION = 'Convert PDF card(.xml) to xrd profile (.txt).'
 # py2app用の変数
 SRC = [os.path.join('gui', 'gui.py')]
 DATA_FILES = []
-PKGS = ['pandas', 'PySimpleGUI']
+PKGS = ['pandas']
 ICON = os.path.join('gui', 'icon', '{}.icns'.format(PACKAGE_NAME))
 # --------------------------------------------------------------------
 
