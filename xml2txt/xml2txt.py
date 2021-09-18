@@ -4,11 +4,11 @@ import pandas as pd
 from decimal import Decimal
 
 
-def xml2df(file, start = 10, end = 60, thres = 0.001):
+def xml2df(fpath, start = 10, end = 60, thres = 0.001):
     # float to Decimal
     thres = Decimal(str(thres))
 
-    with open(file, mode = 'r', encoding = 'utf_8') as f:
+    with open(fpath, mode = 'r', encoding = 'utf_8') as f:
         content = f.read()#.replace('\n', '')
     intensity = content[content.find('<stick_series'):content.find('</stick_series')]
     # print(re.findall('<intensity>(.*)</intensity>', intensity))
@@ -59,8 +59,8 @@ def xml2df(file, start = 10, end = 60, thres = 0.001):
     return df
 
 if __name__ == '__main__':
-    file = 'example/PDF Card - 01-082-3446.xml'
-    df = xml2df(file)
+    fpath = 'example/PDF Card - 01-082-3446.xml'
+    df = xml2df(fpath)
     df.to_csv('example/output.txt', encoding = 'utf_8_sig', index = False)
 
 
